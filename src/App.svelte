@@ -33,7 +33,7 @@
     }
     .footer {
         background-color: pink;
-        height: 300px;
+        height: 200px;
     }
 	.aside {
         width: 14em;

@@ -1,8 +1,81 @@
 import {tetraParams as t} from './TetraKeyDefs'
-import {MOD_DESTINATIONS, MOD_SOURCES} from './DataDefs'
 import * as R from 'ramda'
 const toString = R.map(R.toString);
 const stringRange = (start : number, end: number) => toString(R.range(start, end+1))
+const MOD_SOURCES = [
+    "Off",
+    "Sequence Track 1",
+    "Sequence Track 2",
+    "Sequence Track 3",
+    "Sequence Track 4",
+    "LFO 1",
+    "LFO 2",
+    "LFO 3",
+    "LFO 4",
+    "Filter Envelope",
+    "Amp Envelope",
+    "Envelope 3",
+    "Pitch Bend",
+    "Mod Wheel",
+    "Pressure",
+    "MIDI Breath",
+    "MIDI Foot",
+    "MIDI Expression",
+    "Velocity",
+    "Note Number",
+    "Noise"
+];
+const MOD_DESTINATIONS = [
+    "Off",
+    "Osc 1 Freq",
+    "Osc 2 Freq",
+    "Osc 1 and 2 Freq",
+    "Osc Mix",
+    "Noise Level",
+    "Osc 1 Pulse Width",
+    "Osc 2 Pulse Width",
+    "Osc 1 and 2 Pulse Width",
+    "Filter Frequency",
+    "Resonance",
+    "Filter Audio Mod Amt",
+    "VCA Level",
+    "Pan Spread",
+    "LFO 1 Freq",
+    "LFO 2 Freq",
+    "LFO 3 Freq",
+    "LFO 4 Freq",
+    "All LFO Freq",
+    "LFO 1 Amt",
+    "LFO 2 Amt",
+    "LFO 3 Amt",
+    "LFO 4 Amt",
+    "All LFO Amt",
+    "Filter Env Amt",
+    "Amp Env Amt",
+    "Env 3 Amt",
+    "All Env Amounts",
+    "Env 1 Attack",
+    "Env 2 Attack",
+    "Env 3 Attack",
+    "All Env Attacks",
+    "Env 1 Decay",
+    "Env 2 Decay",
+    "Env 3 Decay",
+    "All Env Decays",
+    "Env 1 Release",
+    "Env 2 Release",
+    "Env 3 Release",
+    "All Env Releases",
+    "Mod 1 Amt",
+    "Mod 2 Amt",
+    "Mod 3 Amt",
+    "Mod 4 Amt",
+    "Feedback Volume",
+    "Sub Osc 1 Level",
+    "Sub Osc 2 Level",
+    "Feedback Gain",
+    "Slew"
+];
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const OCTAVES = [0,1,2,3,4,5,6,7,8,9];
 const FreqValues = [...R.chain(oct => R.map(note => note + oct,NOTES), OCTAVES), 'C10']
@@ -38,6 +111,12 @@ const ENV_AMOUNT = (label: string, key: string, nrpn: number): IControl => {
 const DESTINATION = (label: string, key: string, nrpn: number): IControl => {
     return {
         label, key, min: 0, max: 47, values: MOD_DESTINATIONS, default: 0, nrpn
+    }
+}
+
+const SEQ_TRACK = (label: string, key: string, nrpn: number): IControl => {
+    return {
+        label, key, min: 0, max: 127, default: 0, values: [...toString(R.range(0,126)), 'Reset', 'Rest'], nrpn
     }
 }
 
@@ -322,51 +401,7 @@ let TetraRemote : IRemote =
                                 nrpn: 113
                             }
                         ]
-                    },
-                    {
-                        name: "Seq",
-                        controls: [
-                            {
-                                label: "Arp",
-                                key: t.a.bits.arp.on,
-                                min: 0,
-                                max: 1,
-                                values: OFF_ON,
-                                default: 0,
-                                nrpn: 100
-                            },
-                            {
-                                label: "Arp Mode",
-                                key: t.a.bits.arp.mode,
-                                min: 0,
-                                max: 14,
-                                values: ARP_MODES,
-                                default: 0,
-                                nrpn: 97
-                            },
-                            {
-                                label: "Clock",
-                                key: t.a.bits.arp.clock,
-                                min: 0,
-                                max: 12,
-                                values: CLOCK_DIVIDE,
-                                default: 0,
-                                nrpn: 92
-                            },
-                            {
-                                label: "BPM",
-                                key: t.a.bits.arp.bpm,
-                                min: 0,
-                                max: 220,
-                                values: toString(R.range(0, 221)),
-                                default: 0,
-                                nrpn: 91
-                            },
-
-                            
-                        ]
                     }
-
                 ]
             },
             {
@@ -484,7 +519,7 @@ let TetraRemote : IRemote =
                             SEVEN_BIT_CONTROL("Init", t.a.amp.initial, 0, 27),
                             SEVEN_BIT_CONTROL("Spread", t.a.amp.spread, 0, 28),
                             SEVEN_BIT_CONTROL("Vol", t.a.amp.volume, 127, 29),
-                            ENV_AMOUNT("Env", t.a.amp.env.amount, 30),
+                            SEVEN_BIT_CONTROL("Env", t.a.amp.env.amount, 127, 30),
                             SEVEN_BIT_CONTROL("Velo", t.a.amp.env.velo, 0, 31),
                             SEVEN_BIT_CONTROL("Delay", t.a.amp.env.delay, 0, 32),
                             SEVEN_BIT_CONTROL("Attack", t.a.amp.env.attack, 0, 33),
@@ -704,7 +739,7 @@ let TetraRemote : IRemote =
                 width: 3,
                 tabs: [
                     {
-                        name: "MOD1",
+                        name: "MOD 1",
                         controls: [
                             {
                                 label: "Source",
@@ -736,7 +771,7 @@ let TetraRemote : IRemote =
                         ]
                     },
                     {
-                        name: "MOD2",
+                        name: "MOD 2",
                         controls: [
                             {
                                 label: "Source",
@@ -768,7 +803,7 @@ let TetraRemote : IRemote =
                         ]
                     },
                     {
-                        name: "MOD3",
+                        name: "MOD 3",
                         controls: [
                             {
                                 label: "Source",
@@ -800,7 +835,7 @@ let TetraRemote : IRemote =
                         ]
                     },
                     {
-                        name: "MOD4",
+                        name: "MOD 4",
                         controls: [
                             {
                                 label: "Source",
@@ -872,6 +907,161 @@ let TetraRemote : IRemote =
                             DESTINATION("Dest", t.a.mod.foot.destination, 90)
                         ]
                     }
+                ]
+            },
+            {
+                height: 2,
+                width: 8,
+                tabs: [
+                    {
+                        name: "Seq",
+                        controls: [
+                            {
+                                label: 'Seq toggle',
+                                key: t.a.bits.seq.toggle,
+                                min: 0,
+                                max: 1,
+                                default: 0,
+                                values: OFF_ON,
+                                nrpn: 101
+                            },
+                            {
+                                label: 'Seq Mode',
+                                key: t.a.bits.seq.trigger,
+                                min: 0,
+                                max: 4,
+                                default: 0,
+                                values: ['Normal', 'Normal, no reset', 'No gate', 'No gate, no reset', 'Key step'],
+                                nrpn: 94
+                            },
+                            DESTINATION("Dest 1", t.a.bits.seq.destination.a, 77),
+                            DESTINATION("Dest 2", t.a.bits.seq.destination.b, 77),
+                            DESTINATION("Dest 3", t.a.bits.seq.destination.c, 77),
+                            DESTINATION("Dest 4", t.a.bits.seq.destination.d, 77),
+                            {
+                                label: "Clock",
+                                key: t.a.bits.arp.clock,
+                                min: 0,
+                                max: 12,
+                                values: CLOCK_DIVIDE,
+                                default: 0,
+                                nrpn: 92
+                            },
+                            {
+                                label: "BPM",
+                                key: t.a.bits.arp.bpm,
+                                min: 0,
+                                max: 220,
+                                values: toString(R.range(0, 221)),
+                                default: 0,
+                                nrpn: 91
+                            },
+                            {
+                                label: "Arp toggle",
+                                key: t.a.bits.arp.on,
+                                min: 0,
+                                max: 1,
+                                values: OFF_ON,
+                                default: 0,
+                                nrpn: 100
+                            },
+                            {
+                                label: "Arp Mode",
+                                key: t.a.bits.arp.mode,
+                                min: 0,
+                                max: 14,
+                                values: ARP_MODES,
+                                default: 0,
+                                nrpn: 97
+                            },
+                        ]
+                    },
+                    {
+                        name: 'Track 1',
+                        controls: [
+                            SEQ_TRACK('Step 1', t.a.track.a.a, 120),
+                            SEQ_TRACK('Step 2', t.a.track.a.b, 121),
+                            SEQ_TRACK('Step 3', t.a.track.a.c, 122),
+                            SEQ_TRACK('Step 4', t.a.track.a.d, 123),
+                            SEQ_TRACK('Step 5', t.a.track.a.e, 124),
+                            SEQ_TRACK('Step 6', t.a.track.a.f, 125),
+                            SEQ_TRACK('Step 7', t.a.track.a.g, 126),
+                            SEQ_TRACK('Step 8', t.a.track.a.h, 127),
+                            SEQ_TRACK('Step 9', t.a.track.a.i, 128),
+                            SEQ_TRACK('Step 10', t.a.track.a.j, 129),
+                            SEQ_TRACK('Step 11', t.a.track.a.k, 130),
+                            SEQ_TRACK('Step 12', t.a.track.a.l, 131),
+                            SEQ_TRACK('Step 13', t.a.track.a.m, 132),
+                            SEQ_TRACK('Step 14', t.a.track.a.n, 133),
+                            SEQ_TRACK('Step 15', t.a.track.a.o, 134),
+                            SEQ_TRACK('Step 16', t.a.track.a.p, 135),
+
+                        ]
+                    },
+                    {
+                        name: 'Track 2',
+                        controls: [
+                            SEQ_TRACK('Step 1', t.a.track.b.a, 136),
+                            SEQ_TRACK('Step 2', t.a.track.b.b, 137),
+                            SEQ_TRACK('Step 3', t.a.track.b.c, 138),
+                            SEQ_TRACK('Step 4', t.a.track.b.d, 139),
+                            SEQ_TRACK('Step 5', t.a.track.b.e, 140),
+                            SEQ_TRACK('Step 6', t.a.track.b.f, 141),
+                            SEQ_TRACK('Step 7', t.a.track.b.g, 142),
+                            SEQ_TRACK('Step 8', t.a.track.b.h, 143),
+                            SEQ_TRACK('Step 9', t.a.track.b.i, 144),
+                            SEQ_TRACK('Step 10', t.a.track.b.j, 145),
+                            SEQ_TRACK('Step 11', t.a.track.b.k, 146),
+                            SEQ_TRACK('Step 12', t.a.track.b.l, 147),
+                            SEQ_TRACK('Step 13', t.a.track.b.m, 148),
+                            SEQ_TRACK('Step 14', t.a.track.b.n, 149),
+                            SEQ_TRACK('Step 15', t.a.track.b.o, 150),
+                            SEQ_TRACK('Step 16', t.a.track.b.p, 151),
+                        ]
+                    },
+                    {
+                        name: 'Track 3',
+                        controls: [
+                            SEQ_TRACK('Step 1', t.a.track.c.a, 152),
+                            SEQ_TRACK('Step 2', t.a.track.c.b, 153),
+                            SEQ_TRACK('Step 3', t.a.track.c.c, 154),
+                            SEQ_TRACK('Step 4', t.a.track.c.d, 155),
+                            SEQ_TRACK('Step 5', t.a.track.c.e, 156),
+                            SEQ_TRACK('Step 6', t.a.track.c.f, 157),
+                            SEQ_TRACK('Step 7', t.a.track.c.g, 158),
+                            SEQ_TRACK('Step 8', t.a.track.c.h, 159),
+                            SEQ_TRACK('Step 9', t.a.track.c.i, 160),
+                            SEQ_TRACK('Step 10', t.a.track.c.j, 161),
+                            SEQ_TRACK('Step 11', t.a.track.c.k, 162),
+                            SEQ_TRACK('Step 12', t.a.track.c.l, 163),
+                            SEQ_TRACK('Step 13', t.a.track.c.m, 164),
+                            SEQ_TRACK('Step 14', t.a.track.c.n, 165),
+                            SEQ_TRACK('Step 15', t.a.track.c.o, 166),
+                            SEQ_TRACK('Step 16', t.a.track.c.p, 167),
+                        ]
+                    },
+                    {
+                        name: 'Track 4',
+                        controls: [
+                            SEQ_TRACK('Step 1', t.a.track.d.a, 120),
+                            SEQ_TRACK('Step 2', t.a.track.d.b, 121),
+                            SEQ_TRACK('Step 3', t.a.track.d.c, 122),
+                            SEQ_TRACK('Step 4', t.a.track.d.d, 123),
+                            SEQ_TRACK('Step 5', t.a.track.d.e, 124),
+                            SEQ_TRACK('Step 6', t.a.track.d.f, 125),
+                            SEQ_TRACK('Step 7', t.a.track.d.g, 126),
+                            SEQ_TRACK('Step 8', t.a.track.d.h, 127),
+                            SEQ_TRACK('Step 9', t.a.track.d.i, 128),
+                            SEQ_TRACK('Step 10', t.a.track.d.j, 129),
+                            SEQ_TRACK('Step 11', t.a.track.d.k, 130),
+                            SEQ_TRACK('Step 12', t.a.track.d.l, 131),
+                            SEQ_TRACK('Step 13', t.a.track.d.m, 132),
+                            SEQ_TRACK('Step 14', t.a.track.d.n, 133),
+                            SEQ_TRACK('Step 15', t.a.track.d.o, 134),
+                            SEQ_TRACK('Step 16', t.a.track.d.p, 135),
+                        ]
+                    },
+                    
                 ]
             }
         ]

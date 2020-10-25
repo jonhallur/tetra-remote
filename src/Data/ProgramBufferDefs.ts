@@ -1,83 +1,9 @@
 import * as R from 'ramda'
-import * as S from './LayerA_Names'
 import {tetraParams as t} from './TetraKeyDefs'
+const __NOT_USED__ = "__NotUsed__"
+
 
 let settingsObject = {value: 0}
-const MOD_SOURCES = [
-    "Off",
-    "Sequence Track 1",
-    "Sequence Track 2",
-    "Sequence Track 3",
-    "Sequence Track 4",
-    "LFO 1",
-    "LFO 2",
-    "LFO 3",
-    "LFO 4",
-    "Filter Envelope",
-    "Amp Envelope",
-    "Envelope 3",
-    "Pitch Bend",
-    "Mod Wheel",
-    "Pressure",
-    "MIDI Breath",
-    "MIDI Foot",
-    "MIDI Expression",
-    "Velocity",
-    "Note Number",
-    "Noise"
-];
-
-const MOD_DESTINATIONS = [
-    "Off",
-    "Osc 1 Freq",
-    "Osc 2 Freq",
-    "Osc 1 and 2 Freq",
-    "Osc Mix",
-    "Noise Level",
-    "Osc 1 Pulse Width",
-    "Osc 2 Pulse Width",
-    "Osc 1 and 2 Pulse Width",
-    "Filter Frequency",
-    "Resonance",
-    "Filter Audio Mod Amt",
-    "VCA Level",
-    "Pan Spread",
-    "LFO 1 Freq",
-    "LFO 2 Freq",
-    "LFO 3 Freq",
-    "LFO 4 Freq",
-    "All LFO Freq",
-    "LFO 1 Amt",
-    "LFO 2 Amt",
-    "LFO 3 Amt",
-    "LFO 4 Amt",
-    "All LFO Amt",
-    "Filter Env Amt",
-    "Amp Env Amt",
-    "Env 3 Amt",
-    "All Env Amounts",
-    "Env 1 Attack",
-    "Env 2 Attack",
-    "Env 3 Attack",
-    "All Env Attacks",
-    "Env 1 Decay",
-    "Env 2 Decay",
-    "Env 3 Decay",
-    "All Env Decays",
-    "Env 1 Release",
-    "Env 2 Release",
-    "Env 3 Release",
-    "All Env Releases",
-    "Mod 1 Amt",
-    "Mod 2 Amt",
-    "Mod 3 Amt",
-    "Mod 4 Amt",
-    "Feedback Volume",
-    "Sub Osc 1 Level",
-    "Sub Osc 2 Level",
-    "Feedback Gain",
-    "Slew"
-];
 
 let ProgramEditBufferPos : Array<Array<string>> = [
     [
@@ -212,13 +138,13 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.global.assign.b,  //112
         t.global.assign.c,
         t.global.assign.d,
-        S.NOT_USED,
-        S.NOT_USED,
-        S.NOT_USED,  //Editor byte
-        S.NOT_USED,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,  //Editor byte
+        __NOT_USED__,
     ],
     [
-        S.NOT_USED,  // 119
+        __NOT_USED__,  // 119
         t.a.track.a.a,
         t.a.track.a.b,
         t.a.track.a.c,
@@ -252,6 +178,60 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.b.i,
         t.a.track.b.j,
         t.a.track.b.k,
+    ],
+    [
+        t.a.track.b.l,
+        t.a.track.b.m,
+        t.a.track.b.n,
+        t.a.track.b.o,
+        t.a.track.b.p,
+        t.a.track.c.a,
+        t.a.track.c.b,
+    ],
+    [
+        t.a.track.c.c,
+        t.a.track.c.d,
+        t.a.track.c.e,
+        t.a.track.c.f,
+        t.a.track.c.g,
+        t.a.track.c.h,
+        t.a.track.c.i,
+    ],
+    [
+        t.a.track.c.j,
+        t.a.track.c.k,
+        t.a.track.c.l,
+        t.a.track.c.m,
+        t.a.track.c.n,
+        t.a.track.c.o,
+        t.a.track.c.p,
+    ],
+    [
+        t.a.track.d.a,
+        t.a.track.d.b,
+        t.a.track.d.c,
+        t.a.track.d.d,
+        t.a.track.d.e,
+        t.a.track.d.f,
+        t.a.track.d.g,
+    ],
+    [
+        t.a.track.d.h,
+        t.a.track.d.i,
+        t.a.track.d.j,
+        t.a.track.d.k,
+        t.a.track.d.l,
+        t.a.track.d.m,
+        t.a.track.d.n,
+    ],
+    [
+        t.a.track.d.o,
+        t.a.track.d.p,
+        t.a.name.a,
+        t.a.name.b,
+        t.a.name.c,
+        t.a.name.d,
+        t.a.name.e,
     ]
 ];
 
@@ -262,4 +242,4 @@ let ProgramEditBufferObj = R.pipe(
     R.fromPairs
 )(ProgramEditBufferPos)
 
-export { ProgramEditBufferPos, ProgramEditBufferObj, MOD_DESTINATIONS, MOD_SOURCES}
+export { ProgramEditBufferPos, ProgramEditBufferObj}

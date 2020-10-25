@@ -251,7 +251,6 @@ class Arp extends Params {
     mode: string;
     bpm: string;
     clock: string;
-    seq: string;
     constructor(path: ParamPath) {
         super(path);
         this.on = this.setPath('on');
@@ -345,6 +344,7 @@ class Categories extends Params {
         this.mod = new Mods([...path, 'mod']);
         this.bits = new Bits([...path, 'bits']);
         this.track = new Tracks([...path, 'track']);
+        this.name = new Sixteen([...path, 'name']);
     }
 }
 

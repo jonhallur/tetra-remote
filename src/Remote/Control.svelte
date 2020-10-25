@@ -2,7 +2,7 @@
     export let control : IControl;
     import {createEventDispatcher} from 'svelte';
     import * as R from 'ramda';
-    import type { IControl } from '../RemoteDefs';
+    import type { IControl } from '../Data/RemoteDefs';
     const dispatch = createEventDispatcher();
 
     function setNewValue(newValue: string|number) {

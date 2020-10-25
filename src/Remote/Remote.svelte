@@ -1,11 +1,10 @@
 <script lang="ts">
     import * as R from 'ramda';
-    import { TetraRemote } from '../RemoteDefs';
+    import { TetraRemote } from '../Data/RemoteDefs';
     import { programEditBuffer, sendNRPN } from "../MIDI/MidiDevices";
-    import type { IRemote, Layer, Category, Tab, IControl } from '../RemoteDefs';
+    import type { IRemote, Layer, Category, Tab, IControl } from '../Data/RemoteDefs';
     import { Tabs, TabList, TabPanel, Tab as TabTitle } from '../Layout/tabs';
     import ControlLayout from './Control.svelte';
-    import type { LAYERA_AMP_Attack } from '../LayerA_Names';
     let currentRemote : IRemote = R.clone(TetraRemote);
     const forIndexed = R.addIndex(R.forEach);
     const zipToPath = (param : Array<string|number>, idxPath : Array<string|number>) => R.flatten(R.zip(idxPath, param))
@@ -85,15 +84,18 @@
     }
 
     .category-width-4 {
-        width: 352px;
+        width: 312px;
     }
 
     .category-width-5 {
-        width: 440px;
+        width: 390px;
     }
 
     .category-width-6 {
-        width: 528px;
+        width: 468px;
+    }
+    .category-width-8 {
+        width: 624px;
     }
 
     .tab-label {

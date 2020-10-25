@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import {ProgramEditBufferObj, ProgramEditBufferPos} from './DataDefs'
+import {ProgramEditBufferObj, ProgramEditBufferPos} from './ProgramBufferDefs'
 let mapIndexed = R.addIndex(R.map)
 
 function packBytes(chunk: number[]) {

@@ -2,7 +2,7 @@ import 'webmidi';
 import * as R from 'ramda'
 import {throttle, debounce} from 'lodash'
 import { writable } from 'svelte/store'; 
-import {parseProgramEditBuffer} from '../DumpParser'
+import {parseProgramEditBuffer} from '../Data/ProgramDumpParser'
 
 const NOTE_OFF = 0b1000;
 const NOTE_ON = 0b1001;
