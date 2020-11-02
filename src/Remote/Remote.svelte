@@ -6,6 +6,9 @@
     import { Tabs, TabList, TabPanel, Tab as TabTitle } from '../Layout/tabs';
     import ControlLayout from './Control.svelte';
     let currentRemote : IRemote = R.clone(TetraRemote);
+    let bufferToSend = [];
+    let bufferLength = 0;
+    let sendDelay = 10;
     const forIndexed = R.addIndex(R.forEach);
     const zipToPath = (param : Array<string|number>, idxPath : Array<string|number>) => R.flatten(R.zip(idxPath, param))
     const controlPath = ['categories', 'tabs', 'controls', 'current'];
@@ -26,18 +29,37 @@
     function updateValue(value: number, path: Array<number>, control: IControl) {
         let currentValuePath = zipToPath(controlPath, path);
         currentRemote = R.set(R.lensPath(currentValuePath), value, currentRemote);
-        let {nrpn} = control;
-        sendNRPN(nrpn, value)
+        let {nrpn, min} = control;
+        sendNRPN(nrpn, value + min)
+        programEditBuffer.set(R.set(R.lensProp(control.key), value + min, $programEditBuffer))
+    }
+
+    function sendFirstFromBuffer() {
+        if(bufferToSend && R.length(bufferToSend) > 0) {
+            let [nrpn, value] = R.head(bufferToSend);
+            bufferToSend = R.tail(bufferToSend);
+            setTimeout(() => {
+                sendNRPN(nrpn, value);
+                sendFirstFromBuffer();
+            }, sendDelay)
+        }
+        else {
+            console.log("hide")
+        }
     }
     
     programEditBuffer.subscribe((buffer :IRemote) => {
+        bufferToSend = [];
         doToEachControl((layerIdx, categoryIdx, tabIdx, controlIdx, control) => {
             let value = buffer[control.key];
             if (value !== undefined) {
                 let currentValuePath = zipToPath(controlPath, [layerIdx, categoryIdx, tabIdx, controlIdx]);
-                currentRemote = R.set(R.lensPath(currentValuePath), value, currentRemote);
+                currentRemote = R.set(R.lensPath(currentValuePath), value - control.min, currentRemote);
+                bufferToSend.push([control.nrpn, value]);
             }
         }, currentRemote)
+        bufferLength = R.length(bufferToSend);
+        sendFirstFromBuffer();
     })
 
     doToEachControl((layerIdx, categoryIdx, tabIdx, controlIdx, control) => {
@@ -111,7 +133,40 @@
         font-size: larger;
     }
 
+    .modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid green;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(30, 30, 30, 0.9);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bar {
+        color: white;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -50px;
+        margin-left: -50px;
+        width: 300px;
+        height: 50px;
+    }
 </style>
+<div class="modal" style={R.isEmpty(bufferToSend) ?  'display: none' : 'display: block'}>
+    <div class="bar">
+        <p>Loading patch  {bufferLength - R.length(bufferToSend)} / {bufferLength}</p>
+        <progress max={bufferLength} value={bufferLength - R.length(bufferToSend)}></progress>
+    </div>
+</div>
 
 <Tabs>
     <TabList>

@@ -15,6 +15,7 @@
 
 <style>
 	button {
+		font-weight: 600;
 		background: none;
 		border: none;
 		border-radius: 0;

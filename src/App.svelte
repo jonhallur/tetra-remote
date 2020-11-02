@@ -1,16 +1,18 @@
 <script lang="ts">
+    import * as R from 'ramda'
     import MidiSelector from './MIDI/MidiSettings.svelte'
     import Remote from './Remote/Remote.svelte'
+    import StoredPatches from './Aside/StoredPatches.svelte'
 </script>
+
 
 <main class="mother">
     <div class="header">
         <MidiSelector></MidiSelector>
     </div>
-
     <div class="main-row">
         <div class="aside">
-            aside
+            <StoredPatches />
         </div>
         <div class="main">
             <Remote />
@@ -32,12 +34,10 @@
 
     }
     .footer {
-        background-color: pink;
         height: 200px;
     }
 	.aside {
-        width: 14em;
-        background-color: lightcoral;
+        width: 30em;
     }
     .main-row {
         flex: 1;

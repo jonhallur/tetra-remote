@@ -80,6 +80,7 @@ const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const OCTAVES = [0,1,2,3,4,5,6,7,8,9];
 const FreqValues = [...R.chain(oct => R.map(note => note + oct,NOTES), OCTAVES), 'C10']
 const PULSE_RANGES = R.map(n => "Pulse " + n, toString(R.range(0, 100)));
+const ASCII = ['(space)', ...R.map(String.fromCharCode, R.range(33, 128))];
 const WaveForms = ['Off', 'Saw', 'Triangle', 'Saw / Tri', ...PULSE_RANGES]
 const OFF_ON = ['Off', 'On']
 const SEVEN_BITS = stringRange(0,127);
@@ -117,6 +118,12 @@ const DESTINATION = (label: string, key: string, nrpn: number): IControl => {
 const SEQ_TRACK = (label: string, key: string, nrpn: number): IControl => {
     return {
         label, key, min: 0, max: 127, default: 0, values: [...toString(R.range(0,126)), 'Reset', 'Rest'], nrpn
+    }
+}
+
+const NAME_CHAR = (label: string, key: string, nrpn: number): IControl => {
+    return {
+        label, key, min: 32, max: 127, default: 0, values: ASCII, nrpn
     }
 }
 
@@ -616,7 +623,7 @@ let TetraRemote : IRemote =
                                 max: 166,
                                 values: LFO_FREQ,
                                 default: 159,
-                                nrpn: 37
+                                nrpn: 42
                             },
                             {
                                 label: 'Shape',
@@ -625,9 +632,9 @@ let TetraRemote : IRemote =
                                 max: 4,
                                 values: LFO_WAVE,
                                 default: 0,
-                                nrpn: 38
+                                nrpn: 43
                             },
-                            SEVEN_BIT_CONTROL("Amount", t.a.lfo.b.amount, 0, 39),
+                            SEVEN_BIT_CONTROL("Amount", t.a.lfo.b.amount, 0, 44),
                             {
                                 label: 'Dest',
                                 key: t.a.lfo.b.destination,
@@ -635,7 +642,7 @@ let TetraRemote : IRemote =
                                 max: 43,
                                 values: MOD_DESTINATIONS,
                                 default: 0,
-                                nrpn: 40
+                                nrpn: 45
                             },
                             {
                                 label: 'Sync',
@@ -644,7 +651,7 @@ let TetraRemote : IRemote =
                                 max: 1,
                                 values: OFF_ON,
                                 default: 0,
-                                nrpn: 41
+                                nrpn: 46
                             }
                         ]
                     },
@@ -658,7 +665,7 @@ let TetraRemote : IRemote =
                                 max: 166,
                                 values: LFO_FREQ,
                                 default: 159,
-                                nrpn: 37
+                                nrpn: 47
                             },
                             {
                                 label: 'Shape',
@@ -667,9 +674,9 @@ let TetraRemote : IRemote =
                                 max: 4,
                                 values: LFO_WAVE,
                                 default: 0,
-                                nrpn: 38
+                                nrpn: 48
                             },
-                            SEVEN_BIT_CONTROL("Amount", t.a.lfo.c.amount, 0, 39),
+                            SEVEN_BIT_CONTROL("Amount", t.a.lfo.c.amount, 0, 49),
                             {
                                 label: 'Dest',
                                 key: t.a.lfo.c.destination,
@@ -677,7 +684,7 @@ let TetraRemote : IRemote =
                                 max: 43,
                                 values: MOD_DESTINATIONS,
                                 default: 0,
-                                nrpn: 40
+                                nrpn: 50
                             },
                             {
                                 label: 'Sync',
@@ -686,7 +693,7 @@ let TetraRemote : IRemote =
                                 max: 1,
                                 values: OFF_ON,
                                 default: 0,
-                                nrpn: 41
+                                nrpn: 51
                             }
                         ]
                     },
@@ -700,7 +707,7 @@ let TetraRemote : IRemote =
                                 max: 166,
                                 values: LFO_FREQ,
                                 default: 159,
-                                nrpn: 37
+                                nrpn: 52
                             },
                             {
                                 label: 'Shape',
@@ -709,9 +716,9 @@ let TetraRemote : IRemote =
                                 max: 4,
                                 values: LFO_WAVE,
                                 default: 0,
-                                nrpn: 38
+                                nrpn: 53
                             },
-                            SEVEN_BIT_CONTROL("Amount", t.a.lfo.d.amount, 0, 39),
+                            SEVEN_BIT_CONTROL("Amount", t.a.lfo.d.amount, 0, 54),
                             {
                                 label: 'Dest',
                                 key: t.a.lfo.d.destination,
@@ -719,7 +726,7 @@ let TetraRemote : IRemote =
                                 max: 43,
                                 values: MOD_DESTINATIONS,
                                 default: 0,
-                                nrpn: 40
+                                nrpn: 55
                             },
                             {
                                 label: 'Sync',
@@ -728,7 +735,7 @@ let TetraRemote : IRemote =
                                 max: 1,
                                 values: OFF_ON,
                                 default: 0,
-                                nrpn: 41
+                                nrpn: 56
                             }
                         ]
                     }
@@ -935,9 +942,9 @@ let TetraRemote : IRemote =
                                 nrpn: 94
                             },
                             DESTINATION("Dest 1", t.a.bits.seq.destination.a, 77),
-                            DESTINATION("Dest 2", t.a.bits.seq.destination.b, 77),
-                            DESTINATION("Dest 3", t.a.bits.seq.destination.c, 77),
-                            DESTINATION("Dest 4", t.a.bits.seq.destination.d, 77),
+                            DESTINATION("Dest 2", t.a.bits.seq.destination.b, 78),
+                            DESTINATION("Dest 3", t.a.bits.seq.destination.c, 79),
+                            DESTINATION("Dest 4", t.a.bits.seq.destination.d, 80),
                             {
                                 label: "Clock",
                                 key: t.a.bits.arp.clock,
@@ -1043,25 +1050,53 @@ let TetraRemote : IRemote =
                     {
                         name: 'Track 4',
                         controls: [
-                            SEQ_TRACK('Step 1', t.a.track.d.a, 120),
-                            SEQ_TRACK('Step 2', t.a.track.d.b, 121),
-                            SEQ_TRACK('Step 3', t.a.track.d.c, 122),
-                            SEQ_TRACK('Step 4', t.a.track.d.d, 123),
-                            SEQ_TRACK('Step 5', t.a.track.d.e, 124),
-                            SEQ_TRACK('Step 6', t.a.track.d.f, 125),
-                            SEQ_TRACK('Step 7', t.a.track.d.g, 126),
-                            SEQ_TRACK('Step 8', t.a.track.d.h, 127),
-                            SEQ_TRACK('Step 9', t.a.track.d.i, 128),
-                            SEQ_TRACK('Step 10', t.a.track.d.j, 129),
-                            SEQ_TRACK('Step 11', t.a.track.d.k, 130),
-                            SEQ_TRACK('Step 12', t.a.track.d.l, 131),
-                            SEQ_TRACK('Step 13', t.a.track.d.m, 132),
-                            SEQ_TRACK('Step 14', t.a.track.d.n, 133),
-                            SEQ_TRACK('Step 15', t.a.track.d.o, 134),
-                            SEQ_TRACK('Step 16', t.a.track.d.p, 135),
+                            SEQ_TRACK('Step 1', t.a.track.d.a, 168),
+                            SEQ_TRACK('Step 2', t.a.track.d.b, 169),
+                            SEQ_TRACK('Step 3', t.a.track.d.c, 170),
+                            SEQ_TRACK('Step 4', t.a.track.d.d, 171),
+                            SEQ_TRACK('Step 5', t.a.track.d.e, 172),
+                            SEQ_TRACK('Step 6', t.a.track.d.f, 173),
+                            SEQ_TRACK('Step 7', t.a.track.d.g, 174),
+                            SEQ_TRACK('Step 8', t.a.track.d.h, 175),
+                            SEQ_TRACK('Step 9', t.a.track.d.i, 176),
+                            SEQ_TRACK('Step 10', t.a.track.d.j, 177),
+                            SEQ_TRACK('Step 11', t.a.track.d.k, 178),
+                            SEQ_TRACK('Step 12', t.a.track.d.l, 179),
+                            SEQ_TRACK('Step 13', t.a.track.d.m, 180),
+                            SEQ_TRACK('Step 14', t.a.track.d.n, 181),
+                            SEQ_TRACK('Step 15', t.a.track.d.o, 182),
+                            SEQ_TRACK('Step 16', t.a.track.d.p, 183),
                         ]
                     },
                     
+                ]
+            },
+            {
+                height:2,
+                width:8,
+                tabs: [
+                    {
+                        name: "Name",
+                        controls: [
+                            NAME_CHAR("Char1", t.a.name.a, 184),
+                            NAME_CHAR("Char2", t.a.name.b, 185),
+                            NAME_CHAR("Char3", t.a.name.c, 186),
+                            NAME_CHAR("Char4", t.a.name.d, 187),
+                            NAME_CHAR("Char5", t.a.name.e, 188),
+                            NAME_CHAR("Char6", t.a.name.f, 189),
+                            NAME_CHAR("Char7", t.a.name.g, 190),
+                            NAME_CHAR("Char8", t.a.name.h, 191),
+                            NAME_CHAR("Char9", t.a.name.i, 192),
+                            NAME_CHAR("Char10", t.a.name.j, 193),
+                            NAME_CHAR("Char11", t.a.name.k, 194),
+                            NAME_CHAR("Char12", t.a.name.l, 195),
+                            NAME_CHAR("Char13", t.a.name.m, 196),
+                            NAME_CHAR("Char14", t.a.name.n, 197),
+                            NAME_CHAR("Char15", t.a.name.o, 198),
+                            NAME_CHAR("Char16", t.a.name.p, 199),
+
+                        ]
+                    }
                 ]
             }
         ]

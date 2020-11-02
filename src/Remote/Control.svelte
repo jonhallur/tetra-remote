@@ -19,26 +19,33 @@
     }
 
     function handleScroll({deltaY}) {
+        let currentValue;
         let {min, max, current} = control;
         let change = deltaY > 0 ? -1 : 1;
-        let withChange = current + change;
-        if(withChange > max || withChange < min) {
+        if(typeof current === 'string')
+            currentValue = parseInt(current, 10)
+        else
+            currentValue = current
+        let withChange = currentValue + change;
+        if(withChange > max - min || withChange < 0) {
             return;
         }
         setNewValue(withChange);
     }
 
     function handleClick({offsetX, currentTarget:{clientWidth} }) {
+        let {min, max} = control
         let percentage = offsetX / clientWidth;
-        let range = R.length(control.values) - 1;
+        let range = max - min
         let newValue = Math.round(range * percentage);
         setNewValue(newValue);
     }
 
     function currentControlValueInPct(control) {
         let value = parseInt(control.current, 10);
-        let maxVal = R.length(control.values) - 1;
-        return Math.round((value/maxVal)*100)
+        let {min, max} = control
+        let range = max - min;
+        return Math.round((value/range)*100)
     }
 </script>
 

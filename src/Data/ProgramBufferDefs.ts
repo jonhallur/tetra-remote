@@ -232,6 +232,24 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.name.c,
         t.a.name.d,
         t.a.name.e,
+    ],
+    [
+        t.a.name.f,
+        t.a.name.g,
+        t.a.name.h,
+        t.a.name.i,
+        t.a.name.j,
+        t.a.name.k,
+        t.a.name.l
+    ],
+    [
+        t.a.name.m,
+        t.a.name.n,
+        t.a.name.o,
+        t.a.name.p,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__
     ]
 ];
 
