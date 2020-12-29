@@ -3,58 +3,52 @@ import {tetraParams as t} from './TetraKeyDefs'
 const __NOT_USED__ = "__NotUsed__"
 
 
+
 let settingsObject = {value: 0}
 
-let ProgramEditBufferPos : Array<Array<string>> = [
-    [
+let ProgramEditBufferPos : Array<string> = [
         t.a.osc.a.freq,  // 0
         t.a.osc.a.fine,
         t.a.osc.a.shape,
         t.a.osc.a.glide,
         t.a.osc.a.track,
         t.a.osc.a.sub,
-        t.a.osc.b.freq
-    ],[
+        t.a.osc.b.freq,
         t.a.osc.b.fine,  // 7
         t.a.osc.b.shape,
         t.a.osc.b.glide,
         t.a.osc.b.track,
         t.a.osc.b.sub,
         t.a.osc.sync,
-        t.a.osc.glide
-    ],[
+        t.a.osc.glide,
         t.a.osc.slop,  // 14
         t.a.osc.bend,
         t.a.osc.mix,
         t.a.osc.noise,
         t.a.osc.feedback.gain,
         t.a.osc.feedback.volume,
-        t.a.lpf.freq
-    ],[
+        t.a.lpf.freq,
         t.a.lpf.reso,  // 21
         t.a.lpf.key,
         t.a.lpf.mod,
         t.a.lpf.poles,
         t.a.lpf.env.amount,
         t.a.lpf.env.velo,
-        t.a.lpf.env.delay
-    ],[
+        t.a.lpf.env.delay,
         t.a.lpf.env.attack,  //28
         t.a.lpf.env.decay,
         t.a.lpf.env.sustain,
         t.a.lpf.env.release,
         t.a.amp.initial,
         t.a.amp.env.amount,
-        t.a.amp.env.velo
-    ],[
+        t.a.amp.env.velo,
         t.a.amp.env.delay,  //35
         t.a.amp.env.attack,
         t.a.amp.env.decay,
         t.a.amp.env.sustain,
         t.a.amp.env.release,
         t.a.amp.spread,
-        t.a.amp.volume
-    ],[
+        t.a.amp.volume,
         t.a.lfo.a.freq,  //42
         t.a.lfo.a.shape,
         t.a.lfo.a.amount,
@@ -62,7 +56,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.lfo.a.sync,
         t.a.lfo.b.freq,
         t.a.lfo.b.shape,
-    ],[
         t.a.lfo.b.amount,  //49
         t.a.lfo.b.destination,
         t.a.lfo.b.sync,
@@ -70,7 +63,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.lfo.c.shape,
         t.a.lfo.c.amount,
         t.a.lfo.c.destination,
-    ],[
         t.a.lfo.c.sync,
         t.a.lfo.d.freq,
         t.a.lfo.d.shape,
@@ -78,63 +70,55 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.lfo.d.destination,
         t.a.lfo.d.sync,
         t.a.env3.destination,
-    ],[
         t.a.env3.env.amount,  //63
         t.a.env3.env.velo,
         t.a.env3.env.delay,
         t.a.env3.env.attack,
         t.a.env3.env.decay,
         t.a.env3.env.sustain,
-        t.a.env3.env.release
-    ], [
+        t.a.env3.env.release,
         t.a.env3.repeat,  //70
         t.a.mod.a.source,
         t.a.mod.a.amount,
         t.a.mod.a.destination,
         t.a.mod.b.source,
         t.a.mod.b.amount,
-        t.a.mod.b.destination
-    ],[
+        t.a.mod.b.destination,
         t.a.mod.c.source,  //77
         t.a.mod.c.amount,
         t.a.mod.c.destination,
         t.a.mod.d.source,
         t.a.mod.d.amount,
         t.a.mod.d.destination,
-        t.a.mod.wheel.amount
-    ],[
+        t.a.mod.wheel.amount,
         t.a.mod.wheel.destination,  //84
         t.a.mod.pressure.amount,
         t.a.mod.pressure.destination,
         t.a.mod.breath.amount,
         t.a.mod.breath.destination,
         t.a.mod.velo.amount,
-        t.a.mod.velo.destination
-    ],[
+        t.a.mod.velo.destination,
         t.a.mod.foot.amount,
         t.a.mod.foot.destination,
         t.a.osc.unison.mode, 
         t.a.osc.unison.priority,
         t.a.osc.unison.on,
         t.a.bits.push.note,
-        t.a.bits.push.velo
-    ],[
+        t.a.bits.push.velo,
         t.a.bits.push.mode,
         t.global.split,
         t.global.mode,
         t.a.bits.arp.bpm,
         t.a.bits.arp.clock,
         t.a.bits.arp.mode,
-        t.a.bits.arp.on
-    ],[
+        t.a.bits.arp.on,
         t.a.bits.seq.trigger,
         t.a.bits.seq.toggle,
         t.a.bits.seq.destination.a,
         t.a.bits.seq.destination.b,
         t.a.bits.seq.destination.c,
         t.a.bits.seq.destination.d,
-        t.global.assign.a
-    ],[
+        t.global.assign.a,
         t.global.assign.b,  //112
         t.global.assign.c,
         t.global.assign.d,
@@ -142,8 +126,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         __NOT_USED__,
         __NOT_USED__,  //Editor byte
         __NOT_USED__,
-    ],
-    [
         __NOT_USED__,  // 119
         t.a.track.a.a,
         t.a.track.a.b,
@@ -151,8 +133,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.a.d,
         t.a.track.a.e,
         t.a.track.a.f,
-    ],
-    [
         t.a.track.a.g,
         t.a.track.a.h,
         t.a.track.a.i,
@@ -160,8 +140,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.a.k,
         t.a.track.a.l,
         t.a.track.a.m,
-    ],
-    [
         t.a.track.a.n,
         t.a.track.a.o,
         t.a.track.a.p,
@@ -169,8 +147,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.b.b,
         t.a.track.b.c,
         t.a.track.b.d,
-    ],
-    [
         t.a.track.b.e,
         t.a.track.b.f,
         t.a.track.b.g,
@@ -178,8 +154,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.b.i,
         t.a.track.b.j,
         t.a.track.b.k,
-    ],
-    [
         t.a.track.b.l,
         t.a.track.b.m,
         t.a.track.b.n,
@@ -187,8 +161,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.b.p,
         t.a.track.c.a,
         t.a.track.c.b,
-    ],
-    [
         t.a.track.c.c,
         t.a.track.c.d,
         t.a.track.c.e,
@@ -196,8 +168,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.c.g,
         t.a.track.c.h,
         t.a.track.c.i,
-    ],
-    [
         t.a.track.c.j,
         t.a.track.c.k,
         t.a.track.c.l,
@@ -205,8 +175,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.c.n,
         t.a.track.c.o,
         t.a.track.c.p,
-    ],
-    [
         t.a.track.d.a,
         t.a.track.d.b,
         t.a.track.d.c,
@@ -214,8 +182,6 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.d.e,
         t.a.track.d.f,
         t.a.track.d.g,
-    ],
-    [
         t.a.track.d.h,
         t.a.track.d.i,
         t.a.track.d.j,
@@ -223,38 +189,213 @@ let ProgramEditBufferPos : Array<Array<string>> = [
         t.a.track.d.l,
         t.a.track.d.m,
         t.a.track.d.n,
-    ],
-    [
         t.a.track.d.o,
         t.a.track.d.p,
-        t.a.name.a,
-        t.a.name.b,
-        t.a.name.c,
-        t.a.name.d,
-        t.a.name.e,
-    ],
-    [
-        t.a.name.f,
-        t.a.name.g,
-        t.a.name.h,
-        t.a.name.i,
-        t.a.name.j,
-        t.a.name.k,
-        t.a.name.l
-    ],
-    [
-        t.a.name.m,
-        t.a.name.n,
-        t.a.name.o,
-        t.a.name.p,
+        t.global.name.a,
+        t.global.name.b,
+        t.global.name.c,
+        t.global.name.d,
+        t.global.name.e,
+        t.global.name.f,
+        t.global.name.g,
+        t.global.name.h,
+        t.global.name.i,
+        t.global.name.j,
+        t.global.name.k,
+        t.global.name.l,
+        t.global.name.m,
+        t.global.name.n,
+        t.global.name.o,
+        t.global.name.p,  // 199
+        t.b.osc.a.freq,  // 0
+        t.b.osc.a.fine,
+        t.b.osc.a.shape,
+        t.b.osc.a.glide,
+        t.b.osc.a.track,
+        t.b.osc.a.sub,
+        t.b.osc.b.freq,
+        t.b.osc.b.fine,  // 7
+        t.b.osc.b.shape,
+        t.b.osc.b.glide,
+        t.b.osc.b.track,
+        t.b.osc.b.sub,
+        t.b.osc.sync,
+        t.b.osc.glide,
+        t.b.osc.slop,  // 14
+        t.b.osc.bend,
+        t.b.osc.mix,
+        t.b.osc.noise,
+        t.b.osc.feedback.gain,
+        t.b.osc.feedback.volume,
+        t.b.lpf.freq,
+        t.b.lpf.reso,  // 21
+        t.b.lpf.key,
+        t.b.lpf.mod,
+        t.b.lpf.poles,
+        t.b.lpf.env.amount,
+        t.b.lpf.env.velo,
+        t.b.lpf.env.delay,
+        t.b.lpf.env.attack,  //28
+        t.b.lpf.env.decay,
+        t.b.lpf.env.sustain,
+        t.b.lpf.env.release,
+        t.b.amp.initial,
+        t.b.amp.env.amount,
+        t.b.amp.env.velo,
+        t.b.amp.env.delay,  //35
+        t.b.amp.env.attack,
+        t.b.amp.env.decay,
+        t.b.amp.env.sustain,
+        t.b.amp.env.release,
+        t.b.amp.spread,
+        t.b.amp.volume,
+        t.b.lfo.a.freq,  //42
+        t.b.lfo.a.shape,
+        t.b.lfo.a.amount,
+        t.b.lfo.a.destination,
+        t.b.lfo.a.sync,
+        t.b.lfo.b.freq,
+        t.b.lfo.b.shape,
+        t.b.lfo.b.amount,  //49
+        t.b.lfo.b.destination,
+        t.b.lfo.b.sync,
+        t.b.lfo.c.freq,
+        t.b.lfo.c.shape,
+        t.b.lfo.c.amount,
+        t.b.lfo.c.destination,
+        t.b.lfo.c.sync,
+        t.b.lfo.d.freq,
+        t.b.lfo.d.shape,
+        t.b.lfo.d.amount,
+        t.b.lfo.d.destination,
+        t.b.lfo.d.sync,
+        t.b.env3.destination,
+        t.b.env3.env.amount,  //63
+        t.b.env3.env.velo,
+        t.b.env3.env.delay,
+        t.b.env3.env.attack,
+        t.b.env3.env.decay,
+        t.b.env3.env.sustain,
+        t.b.env3.env.release,
+        t.b.env3.repeat,  //70
+        t.b.mod.a.source,
+        t.b.mod.a.amount,
+        t.b.mod.a.destination,
+        t.b.mod.b.source,
+        t.b.mod.b.amount,
+        t.b.mod.b.destination,
+        t.b.mod.c.source,  //77
+        t.b.mod.c.amount,
+        t.b.mod.c.destination,
+        t.b.mod.d.source,
+        t.b.mod.d.amount,
+        t.b.mod.d.destination,
+        t.b.mod.wheel.amount,
+        t.b.mod.wheel.destination,  //84
+        t.b.mod.pressure.amount,
+        t.b.mod.pressure.destination,
+        t.b.mod.breath.amount,
+        t.b.mod.breath.destination,
+        t.b.mod.velo.amount,
+        t.b.mod.velo.destination,
+        t.b.mod.foot.amount,
+        t.b.mod.foot.destination,
+        t.b.osc.unison.mode, 
+        t.b.osc.unison.priority,
+        t.b.osc.unison.on,
+        t.b.bits.push.note,
+        t.b.bits.push.velo,
+        t.b.bits.push.mode,
         __NOT_USED__,
         __NOT_USED__,
-        __NOT_USED__
-    ]
+        t.b.bits.arp.bpm,
+        t.b.bits.arp.clock,
+        t.b.bits.arp.mode,
+        t.b.bits.arp.on,
+        t.b.bits.seq.trigger,
+        t.b.bits.seq.toggle,
+        t.b.bits.seq.destination.a,
+        t.b.bits.seq.destination.b,
+        t.b.bits.seq.destination.c,
+        t.b.bits.seq.destination.d,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,
+        __NOT_USED__,  // 119
+        t.b.track.a.a,
+        t.b.track.a.b,
+        t.b.track.a.c,
+        t.b.track.a.d,
+        t.b.track.a.e,
+        t.b.track.a.f,
+        t.b.track.a.g,
+        t.b.track.a.h,
+        t.b.track.a.i,
+        t.b.track.a.j,
+        t.b.track.a.k,
+        t.b.track.a.l,
+        t.b.track.a.m,
+        t.b.track.a.n,
+        t.b.track.a.o,
+        t.b.track.a.p,
+        t.b.track.b.a,
+        t.b.track.b.b,
+        t.b.track.b.c,
+        t.b.track.b.d,
+        t.b.track.b.e,
+        t.b.track.b.f,
+        t.b.track.b.g,
+        t.b.track.b.h,
+        t.b.track.b.i,
+        t.b.track.b.j,
+        t.b.track.b.k,
+        t.b.track.b.l,
+        t.b.track.b.m,
+        t.b.track.b.n,
+        t.b.track.b.o,
+        t.b.track.b.p,
+        t.b.track.c.a,
+        t.b.track.c.b,
+        t.b.track.c.c,
+        t.b.track.c.d,
+        t.b.track.c.e,
+        t.b.track.c.f,
+        t.b.track.c.g,
+        t.b.track.c.h,
+        t.b.track.c.i,
+        t.b.track.c.j,
+        t.b.track.c.k,
+        t.b.track.c.l,
+        t.b.track.c.m,
+        t.b.track.c.n,
+        t.b.track.c.o,
+        t.b.track.c.p,
+        t.b.track.d.a,
+        t.b.track.d.b,
+        t.b.track.d.c,
+        t.b.track.d.d,
+        t.b.track.d.e,
+        t.b.track.d.f,
+        t.b.track.d.g,
+        t.b.track.d.h,
+        t.b.track.d.i,
+        t.b.track.d.j,
+        t.b.track.d.k,
+        t.b.track.d.l,
+        t.b.track.d.m,
+        t.b.track.d.n,
+        t.b.track.d.o,
+        t.b.track.d.p,
+        __NOT_USED__,
+
 ];
 
 let ProgramEditBufferObj = R.pipe(
-    R.flatten,
     R.chain(k => [k, R.clone(settingsObject)]),
     R.splitEvery(2),
     R.fromPairs

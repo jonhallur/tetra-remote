@@ -30,7 +30,6 @@ async function storePatch(key, val) {
 }
 
 async function deletePatch(key) {
-    console.log("remove", key)
     await db.delete('patches', key)
     refreshPatchesStore();
 }

@@ -1,9 +1,10 @@
 <script lang="ts">
     export let control : IControl;
-    import {createEventDispatcher} from 'svelte';
+    import {createEventDispatcher, getContext} from 'svelte';
     import * as R from 'ramda';
     import type { IControl } from '../Data/RemoteDefs';
     const dispatch = createEventDispatcher();
+    const { getLeftButtonState } = getContext("LeftMouseButton");
 
     function setNewValue(newValue: string|number) {
         let value : number;
@@ -11,7 +12,7 @@
             value = parseInt(newValue, 10);
         else
             value = newValue;
-        dispatch('updated', newValue);
+        dispatch('updated', value);
     }
 
     function handleChange({currentTarget: {value}}) {
@@ -46,6 +47,11 @@
         let {min, max} = control
         let range = max - min;
         return Math.round((value/range)*100)
+    }
+
+    function handleDrag({offsetX, currentTarget:{clientWidth}}) {
+        if(getLeftButtonState())
+            handleClick({offsetX, currentTarget: {clientWidth}})
     }
 </script>
 
@@ -91,15 +97,25 @@
 </style>
 
 <div class="control"
+    value-nrpn={control.nrpn}
+    value-key={control.key}
     on:wheel|preventDefault={handleScroll}
     >
     <!-- svelte-ignore a11y-no-onchange -->
-    <div class="control-inner">
-        <p class="control-label" on:click|preventDefault={handleClick}>{control.label}</p>
+    <div 
+        class="control-inner"
+        on:mousemove={handleDrag}
+        on:click|preventDefault={handleClick}
+    >
+        <p 
+            class="control-label" 
+        >{control.label}</p>
         <select 
             name="{control.key}" 
             id="{control.key}" 
             on:change|preventDefault={handleChange}
+            on:mousemove={(e) => e.stopPropagation()}
+            on:click={(e) => e.stopPropagation()}
             bind:value={control.current}
             >
             <optgroup>

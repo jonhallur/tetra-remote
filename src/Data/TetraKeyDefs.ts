@@ -333,7 +333,6 @@ class Categories extends Params {
     mod: Mods;
     bits: Bits;
     track: Tracks;
-    name: Sixteen;
     constructor(path: ParamPath) {
         super(path);
         this.osc = new Osc([...path, 'osc']);
@@ -344,7 +343,7 @@ class Categories extends Params {
         this.mod = new Mods([...path, 'mod']);
         this.bits = new Bits([...path, 'bits']);
         this.track = new Tracks([...path, 'track']);
-        this.name = new Sixteen([...path, 'name']);
+        
     }
 }
 
@@ -352,11 +351,13 @@ class Global extends Params {
     split: string;
     mode: string;
     assign: Four;
+    name: Sixteen;
     constructor(path: ParamPath) {
         super(path);
         this.split = this.setPath('split');
         this.mode = this.setPath('mode');
         this.assign = new Four([...path, 'assign']);
+        this.name = new Sixteen([...path, 'name']);
     }
 }
 

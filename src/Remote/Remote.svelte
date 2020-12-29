@@ -1,10 +1,13 @@
 <script lang="ts">
     import * as R from 'ramda';
-    import { TetraRemote } from '../Data/RemoteDefs';
-    import { programEditBuffer, sendNRPN } from "../MIDI/MidiDevices";
+    import { TetraRemote, ControlType } from '../Data/RemoteDefs';
+    import { programEditBuffer, programLoadBuffer, sendNRPN } from "../MIDI/MidiDevices";
     import type { IRemote, Layer, Category, Tab, IControl } from '../Data/RemoteDefs';
     import { Tabs, TabList, TabPanel, Tab as TabTitle } from '../Layout/tabs';
     import ControlLayout from './Control.svelte';
+import { forIn } from 'lodash';
+import { validate_component } from 'svelte/internal';
+    let currentPatchName = "Default_patch";
     let currentRemote : IRemote = R.clone(TetraRemote);
     let bufferToSend = [];
     let bufferLength = 0;
@@ -12,6 +15,8 @@
     const forIndexed = R.addIndex(R.forEach);
     const zipToPath = (param : Array<string|number>, idxPath : Array<string|number>) => R.flatten(R.zip(idxPath, param))
     const controlPath = ['categories', 'tabs', 'controls', 'current'];
+    const SplitLens = R.lensPath([...zipToPath(controlPath, [2,0,0]), 0]);
+    const KeyModeLens = R.lensPath([...zipToPath(controlPath, [2,0,0]), 1]);
     type controlFunc = (layerIdx: number, categoryIdx: number, tabIdx: number, controlIdx: number, control : IControl) => void;
 
     function doToEachControl(func : controlFunc, currentRemote : IRemote) {
@@ -28,6 +33,7 @@
 
     function updateValue(value: number, path: Array<number>, control: IControl) {
         let currentValuePath = zipToPath(controlPath, path);
+
         currentRemote = R.set(R.lensPath(currentValuePath), value, currentRemote);
         let {nrpn, min} = control;
         sendNRPN(nrpn, value + min)
@@ -47,8 +53,59 @@
             console.log("hide")
         }
     }
+
+    function getNameFromBuffer(buffer) {
+        let letters = R.map(String.fromCharCode, R.range(97, 113));
+        let nameKeys = R.map((letter) => R.join('.', ['global.name', letter]), letters);
+        let nameValues = R.map((key) => buffer[key] ,nameKeys)
+        if(R.all(R.isNil, nameValues)) {
+            return "Default Patch"
+        }
+        else {
+            let nameChars = R.map((char) => String.fromCharCode(char), nameValues)
+            return R.join('', nameChars);
+        }
+    }
+
+    function onNameChanged() {
+        let prevName = getNameFromBuffer($programEditBuffer);
+        let charArr = R.take(16, R.split('', currentPatchName));
+        let corrected = R.join('', charArr);
+        if(R.equals(prevName, corrected)) {
+            console.log("is same")
+        } else {
+            let hasChanges = R.map(index => {
+                return R.equals(charArr[index], R.split('', prevName)[index])
+            }, R.range(0, 16))
+            forIndexed((val, idx) => {
+                if(!val) {
+                    let changedLetter = charArr[idx];
+                    if(R.isNil(changedLetter))
+                        changedLetter = ' ';
+                    let charCode = changedLetter.charCodeAt(0);
+                    let asZeroVal = charCode - 32;
+                    let path = [2,0,0,2 + idx];
+                    let letterControl : IControl = R.path([...zipToPath(controlPath, [2,0,0]), 2+idx], currentRemote);
+                    updateValue(asZeroVal, path, letterControl);
+                }
+            }, hasChanges)
+        }
+        currentPatchName = corrected;
+    }
     
     programEditBuffer.subscribe((buffer :IRemote) => {
+        bufferToSend = [];
+        doToEachControl((layerIdx, categoryIdx, tabIdx, controlIdx, control) => {
+            let value = buffer[control.key];
+            if (value !== undefined) {
+                let currentValuePath = zipToPath(controlPath, [layerIdx, categoryIdx, tabIdx, controlIdx]);
+                currentRemote = R.set(R.lensPath(currentValuePath), value - control.min, currentRemote);
+            }
+        }, currentRemote)
+        currentPatchName = getNameFromBuffer(buffer);
+    })
+
+    programLoadBuffer.subscribe((buffer :IRemote) => {
         bufferToSend = [];
         doToEachControl((layerIdx, categoryIdx, tabIdx, controlIdx, control) => {
             let value = buffer[control.key];
@@ -61,6 +118,8 @@
         bufferLength = R.length(bufferToSend);
         sendFirstFromBuffer();
     })
+
+    
 
     doToEachControl((layerIdx, categoryIdx, tabIdx, controlIdx, control) => {
         let currentValuePath = zipToPath(controlPath, [layerIdx, categoryIdx, tabIdx, controlIdx]);
@@ -160,6 +219,10 @@
         width: 300px;
         height: 50px;
     }
+
+    .patchNameInput {
+        font-family: monospace;
+    }
 </style>
 <div class="modal" style={R.isEmpty(bufferToSend) ?  'display: none' : 'display: block'}>
     <div class="bar">
@@ -168,14 +231,26 @@
     </div>
 </div>
 
+<div class="categories">
+    <input class="patchNameInput" type="text" bind:value={currentPatchName} on:input={onNameChanged} />
+    {#each [R.view(SplitLens, currentRemote), R.view(KeyModeLens, currentRemote)] as control, idx}
+    <ControlLayout 
+        {control}
+        on:updated={(evt) => 
+            updateValue(evt.detail, [2, 0, 0, idx], control)
+        }
+    />
+    {/each}
+</div>
+
 <Tabs>
     <TabList>
-        {#each currentRemote as layer}
+        {#each R.take(2, currentRemote) as layer}
             <TabTitle>{layer.name}</TabTitle>
         {/each}
     </TabList>
 
-{#each currentRemote as layer, layerIdx}
+{#each R.take(2, currentRemote) as layer, layerIdx}
 <TabPanel>
     <div class="layer">
         <div class="categories">

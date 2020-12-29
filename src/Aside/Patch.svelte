@@ -4,6 +4,8 @@
     import Icon from 'fa-svelte'
     import {faFileImport} from '@fortawesome/free-solid-svg-icons/faFileImport'
     import {faTrashAlt} from '@fortawesome/free-solid-svg-icons/faTrashAlt'
+    import {faFileExport} from '@fortawesome/free-solid-svg-icons/faFileExport'
+
     import {createEventDispatcher} from 'svelte';
     const dispatch = createEventDispatcher();
     let allowEdit = false;
@@ -43,6 +45,9 @@
         {name}
     </div>
     <div class="col-1">
+        <button on:click={() => dispatch('export', name)}>
+            <Icon icon={faFileExport} ></Icon>
+        </button> 
         <button on:click={() => dispatch('load', name)}>
             <Icon icon={faFileImport} ></Icon>
         </button>

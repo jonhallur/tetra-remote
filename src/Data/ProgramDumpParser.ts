@@ -1,4 +1,5 @@
 import * as R from 'ramda'
+import { programEditBuffer } from '../MIDI/MidiDevices';
 import {ProgramEditBufferObj, ProgramEditBufferPos} from './ProgramBufferDefs'
 let mapIndexed = R.addIndex(R.map)
 
@@ -18,12 +19,15 @@ function packBytes(chunk: number[]) {
 function parseProgramEditBuffer(buff : number[]) {
     let relevant = R.drop(4, buff);
     let packOfBytes = R.splitEvery(8, relevant);
+    let arrayOfSeven = R.splitEvery(7, ProgramEditBufferPos);
+    console.log("pack of byes", packOfBytes.length, arrayOfSeven.length)
+    console.log(arrayOfSeven)
     let objects : Array<Object> = mapIndexed((params : Array<string>, index : number) => {
         let bytes = packOfBytes[index];
         let packed = packBytes(bytes);
         let obj = R.zipObj(params, packed)
         return obj
-    }, ProgramEditBufferPos)
+    }, R.splitEvery(7, ProgramEditBufferPos))
     let buffer = R.mergeAll(objects);
     return buffer;
 }

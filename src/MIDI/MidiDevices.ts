@@ -34,6 +34,7 @@ let remoteInput : WebMidi.MIDIInput;
 let remoteOutput : WebMidi.MIDIOutput;
 let controllerInput : WebMidi.MIDIInput;
 let programEditBuffer = writable({})
+let programLoadBuffer = writable({})
 
 class TwoBytes {
     msb: number;
@@ -238,6 +239,7 @@ export {
     requestSysExDump,
     hasFullDuplexMidi,
     programEditBuffer,
+    programLoadBuffer,
     sendNRPN,
     remoteChannelStore,
     controllerChannelStore,
