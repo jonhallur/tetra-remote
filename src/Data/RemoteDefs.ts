@@ -5,17 +5,17 @@ const toString = R.map(R.toString);
 const stringRange = (start : number, end: number) => toString(R.range(start, end+1))
 const MOD_SOURCES = [
     "Off",
-    "Sequence Track 1",
-    "Sequence Track 2",
-    "Sequence Track 3",
-    "Sequence Track 4",
+    "Seq Track 1",
+    "Seq Track 2",
+    "Seq Track 3",
+    "Seq Track 4",
     "LFO 1",
     "LFO 2",
     "LFO 3",
     "LFO 4",
-    "Filter Envelope",
-    "Amp Envelope",
-    "Envelope 3",
+    "Filter Env",
+    "Amp Env",
+    "Env 3",
     "Pitch Bend",
     "Mod Wheel",
     "Pressure",
@@ -30,12 +30,12 @@ const MOD_DESTINATIONS = [
     "Off",
     "Osc 1 Freq",
     "Osc 2 Freq",
-    "Osc 1 and 2 Freq",
+    "Osc 1 & 2 Freq",
     "Osc Mix",
     "Noise Level",
     "Osc 1 Pulse Width",
     "Osc 2 Pulse Width",
-    "Osc 1 and 2 Pulse Width",
+    "Osc 1 & 2 Pulse Width",
     "Filter Frequency",
     "Resonance",
     "Filter Audio Mod Amt",
@@ -162,7 +162,7 @@ interface ILayer {
 
 type IRemote = Array<ILayer>;
 
-let layerA = {
+let layerA : ILayer = {
     name: "Layer A",
     categories: [
         {
@@ -1080,9 +1080,8 @@ let layerA = {
 
 let layerB = R.clone(layerA)
 layerB.name = "Layer B"
-let controls = [];
 
-R.forEachObjIndexed((category, catIdx : number) => {
+R.forEachObjIndexed((category : ICategory, catIdx : number) => {
     R.forEachObjIndexed((tab : ITab, tabIdx : number) => {
         R.forEachObjIndexed((control : IControl, ctrlIdx : number) => {
             control.key = R.replace('a.', 'b.', control.key);
@@ -1127,7 +1126,7 @@ let TetraRemote : IRemote =
                             NAME_CHAR("Name 4", t.global.name.d, 187),
                             NAME_CHAR("Name 5", t.global.name.e, 188),
                             NAME_CHAR("Name 6", t.global.name.f, 189),
-                            NAME_CHAR("Name 7", t.global.name.g, 191),
+                            NAME_CHAR("Name 7", t.global.name.g, 190),
                             NAME_CHAR("Name 8", t.global.name.h, 191),
                             NAME_CHAR("Name 9", t.global.name.i, 192),
                             NAME_CHAR("Name 10", t.global.name.j, 193),

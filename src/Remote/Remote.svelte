@@ -140,12 +140,14 @@ import { validate_component } from 'svelte/internal';
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        overflow: clip;
     }
 
     .category {
         border: solid 1px black;
         margin: 5px;
         background-color: lightgray;
+        overflow: hidden;
     }
 
     .category-height-1 {
@@ -222,6 +224,9 @@ import { validate_component } from 'svelte/internal';
 
     .patchNameInput {
         font-family: monospace;
+        margin-left: 5px;
+        width: 145px;
+
     }
 </style>
 <div class="modal" style={R.isEmpty(bufferToSend) ?  'display: none' : 'display: block'}>
@@ -233,6 +238,8 @@ import { validate_component } from 'svelte/internal';
 
 <div class="categories">
     <input class="patchNameInput" type="text" bind:value={currentPatchName} on:input={onNameChanged} />
+</div>
+<div class="categories">
     {#each [R.view(SplitLens, currentRemote), R.view(KeyModeLens, currentRemote)] as control, idx}
     <ControlLayout 
         {control}

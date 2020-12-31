@@ -4,7 +4,7 @@
     import * as R from 'ramda';
     import type { IControl } from '../Data/RemoteDefs';
     const dispatch = createEventDispatcher();
-    const { getLeftButtonState } = getContext("LeftMouseButton");
+    const { getLeftButtonState, setPresser, getPresser } = getContext("LeftMouseButton");
 
     function setNewValue(newValue: string|number) {
         let value : number;
@@ -35,6 +35,11 @@
     }
 
     function handleClick({offsetX, currentTarget:{clientWidth} }) {
+        console.log("handle click")
+        handlePosition({offsetX, currentTarget:{clientWidth} })
+    }
+
+    function handlePosition({offsetX, currentTarget:{clientWidth}}) {
         let {min, max} = control
         let percentage = offsetX / clientWidth;
         let range = max - min
@@ -50,8 +55,12 @@
     }
 
     function handleDrag({offsetX, currentTarget:{clientWidth}}) {
-        if(getLeftButtonState())
-            handleClick({offsetX, currentTarget: {clientWidth}})
+        if(getLeftButtonState() && getPresser() === this)
+            handlePosition({offsetX, currentTarget: {clientWidth}})
+    }
+
+    function handleMouseDown() {
+        setPresser(this);
     }
 </script>
 
@@ -105,6 +114,7 @@
     <div 
         class="control-inner"
         on:mousemove={handleDrag}
+        on:mousedown={handleMouseDown}
         on:click|preventDefault={handleClick}
     >
         <p 

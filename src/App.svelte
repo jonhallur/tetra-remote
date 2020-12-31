@@ -1,19 +1,9 @@
 <script lang="ts">
     import * as R from 'ramda'
-    import { setContext } from 'svelte'
     import MidiSelector from './MIDI/MidiSettings.svelte'
     import Remote from './Remote/Remote.svelte'
+    import MouseBtnWrapper from './Remote/MouseBtnWrapper.svelte'
     import StoredPatches from './Aside/StoredPatches.svelte'
-
-    let leftMouseButtonState = false;
-
-    setContext("LeftMouseButton", {
-        getLeftButtonState: () => leftMouseButtonState
-    })
-
-    function setLeftButtonState({buttons} : MouseEvent) {
-        leftMouseButtonState = buttons === 1;
-    }
 </script>
 
 
@@ -25,13 +15,10 @@
         <div class="aside">
             <StoredPatches />
         </div>
-        <div 
-            class="main" 
-            on:mousedown={setLeftButtonState}
-            on:mouseup={setLeftButtonState}
-            on:mousemove={setLeftButtonState}
-        >
-            <Remote />
+        <div class="main">
+            <MouseBtnWrapper>
+                <Remote />
+            </MouseBtnWrapper>
         </div>
     </div>
     <div class="footer">footer</div>
@@ -53,11 +40,14 @@
         height: 100px;
     }
 	.aside {
-        
+        border-right: 1px solid lightslategray;
     }
     .main-row {
         flex: 1;
         display: flex;
+        overflow: hidden;
+    }
+    .main {
         overflow: scroll;
     }
 </style>
