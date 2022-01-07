@@ -1,6 +1,7 @@
 <script>
     import * as R from 'ramda'
     import Patch from './Patch.svelte'
+    import Modal from '../Layout/Modal.svelte'
     import {openDatabase, PatchesStore, storePatch, deletePatch} from '../StateMachines/MidiSM'
     import Icon from 'fa-svelte'
     import {faSave as saveIcon} from '@fortawesome/free-solid-svg-icons/faSave'
@@ -8,6 +9,9 @@
     import { programEditBuffer, programLoadBuffer } from "../MIDI/MidiDevices";
 
     let newPatchName = "";
+    let fileNameToSave = "";
+    let showOverwritePopUp = false;
+    let contentToSave = {}
     openDatabase();
 
     function onLoadPatch({detail}) {
@@ -23,8 +27,15 @@
     }
 
     function onAddPatch() {
-        storePatch(newPatchName, $programEditBuffer);
-        newPatchName = "";
+        if(R.includes(newPatchName, R.keys($PatchesStore))) {
+
+            fileNameToSave = newPatchName;
+            contentToSave = $programEditBuffer;
+            showOverwritePopUp = true;
+        } else {
+            storePatch(newPatchName, $programEditBuffer);
+            newPatchName = "";
+    }
     }
 
     function onExportPatch({detail}) {
@@ -39,11 +50,9 @@
             element.click();
             document.body.removeChild(element);
         } 
-
     }
 
     function onImportPatch() {
-        console.log("import")
         let element = document.createElement('input');
         element.setAttribute('type', 'file');
         element.setAttribute('accept', '.tetraPatch');
@@ -56,7 +65,7 @@
                 reader.addEventListener('load', (event) => {
                     let {target: {result}} = event
                     let fileData = JSON.parse(result);
-                    let fileName = R.head(R.split('.', file.name))
+                    let fileName = R.join('.', R.dropLast(1, R.split('.', file.name)));
                     storePatch(fileName, fileData);
                 });
                 reader.readAsText(file);
@@ -80,6 +89,24 @@
         width: 30px;
     }
 </style>
+
+<Modal 
+    yesNo={true}
+    show={showOverwritePopUp}
+    onConfirm={() => {
+        storePatch(fileNameToSave, contentToSave);
+        newPatchName = "";
+        fileNameToSave = "";
+        contentToSave = {};
+        console.log("Overwritten");
+        showOverwritePopUp = false;
+    }}
+    onCancel={() => {
+        showOverwritePopUp = false;
+    }}
+    title={`Overwrite patch ${newPatchName} ?`}
+    >
+</Modal>
 
 <div class="row">
     <input type="text" bind:value={newPatchName}>

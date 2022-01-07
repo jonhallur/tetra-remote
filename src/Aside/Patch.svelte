@@ -24,6 +24,7 @@
     }
 
     .col-3 {
+        margin-left: 10px;
         flex-grow: 3;
         height: 24px;
         display: inline-block; /*Display inline and maintain block characteristics.*/

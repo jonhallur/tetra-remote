@@ -1,12 +1,11 @@
 <script lang="ts">
     import * as R from 'ramda';
+    import Modal from '../Layout/Modal.svelte';
     import { TetraRemote, ControlType } from '../Data/RemoteDefs';
     import { programEditBuffer, programLoadBuffer, sendNRPN } from "../MIDI/MidiDevices";
     import type { IRemote, Layer, Category, Tab, IControl } from '../Data/RemoteDefs';
     import { Tabs, TabList, TabPanel, Tab as TabTitle } from '../Layout/tabs';
     import ControlLayout from './Control.svelte';
-import { forIn } from 'lodash';
-import { validate_component } from 'svelte/internal';
     let currentPatchName = "Default_patch";
     let currentRemote : IRemote = R.clone(TetraRemote);
     let bufferToSend = [];
@@ -50,7 +49,7 @@ import { validate_component } from 'svelte/internal';
             }, sendDelay)
         }
         else {
-            console.log("hide")
+            programEditBuffer.set($programLoadBuffer)
         }
     }
 
@@ -194,34 +193,6 @@ import { validate_component } from 'svelte/internal';
         font-size: larger;
     }
 
-    .modal {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-        border: 1px solid green;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(30, 30, 30, 0.9);
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .bar {
-        color: white;
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -50px;
-        margin-left: -50px;
-        width: 300px;
-        height: 50px;
-    }
-
     .patchNameInput {
         font-family: monospace;
         margin-left: 5px;
@@ -229,12 +200,13 @@ import { validate_component } from 'svelte/internal';
 
     }
 </style>
-<div class="modal" style={R.isEmpty(bufferToSend) ?  'display: none' : 'display: block'}>
-    <div class="bar">
-        <p>Loading patch  {bufferLength - R.length(bufferToSend)} / {bufferLength}</p>
-        <progress max={bufferLength} value={bufferLength - R.length(bufferToSend)}></progress>
-    </div>
-</div>
+
+<Modal
+    show={!R.isEmpty(bufferToSend)} 
+    title={`Loading patch ${bufferLength - R.length(bufferToSend)} / ${bufferLength}`}
+>
+    <progress max={bufferLength} value={bufferLength - R.length(bufferToSend)}></progress>
+</Modal>
 
 <div class="categories">
     <input class="patchNameInput" type="text" bind:value={currentPatchName} on:input={onNameChanged} />
