@@ -1,5 +1,4 @@
 import * as R from 'ramda'
-import { programEditBuffer } from '../MIDI/MidiDevices';
 import {ProgramEditBufferObj, ProgramEditBufferPos} from './ProgramBufferDefs'
 let mapIndexed = R.addIndex(R.map)
 

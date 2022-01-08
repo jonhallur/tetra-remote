@@ -11,7 +11,9 @@
     let newPatchName = "";
     let fileNameToSave = "";
     let showOverwritePopUp = false;
+    let showDeletePopUp = false;
     let contentToSave = {}
+    let patchToDelete = "";
     openDatabase();
 
     function onLoadPatch({detail}) {
@@ -22,13 +24,12 @@
     }
 
     function onDeletePatch({detail}) {
-        if(window.confirm("Delete patch"))
-            deletePatch(detail);
+        patchToDelete = detail;
+        showDeletePopUp = true;
     }
 
     function onAddPatch() {
         if(R.includes(newPatchName, R.keys($PatchesStore))) {
-
             fileNameToSave = newPatchName;
             contentToSave = $programEditBuffer;
             showOverwritePopUp = true;
@@ -108,6 +109,22 @@
     >
 </Modal>
 
+<Modal
+    yesNo={true}
+    show={showDeletePopUp}
+    onConfirm={() => {
+        if(patchToDelete)
+            deletePatch(patchToDelete)
+        patchToDelete = ""
+        console.log("Deleted");
+        showDeletePopUp = false;
+    }}
+    onCancel={() => {
+        showDeletePopUp = false;
+    }}
+    title={`Delete patch ${patchToDelete} ?`}
+>
+</Modal>
 <div class="row">
     <input type="text" bind:value={newPatchName}>
     <button disabled={newPatchName === ""}  on:click={onAddPatch}>
